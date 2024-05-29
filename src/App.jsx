@@ -13,8 +13,8 @@ export default class App extends Component {
   }
 
   buscarCategorias (){
-   // const url = "https://productos.ctpoba.edu.ar/api/categorias";
-    const url = "http://10.0.4.103:3000/api/categorias";
+   const url = "https://productos.ctpoba.edu.ar/api/categorias";
+   //const url = "http://10.0.4.103:3000/api/categorias";
     axios.get(url)
       .then((resp) => {
         this.setState({ categorias: resp.data.categorias });
@@ -25,11 +25,12 @@ export default class App extends Component {
   }
 
   buscarProductos (categoria_id){
-     const url = "http://10.0.4.103:3000/api/productos";
+     const url = "https://productos.ctpoba.edu.ar/api/productos";
+     //const url = "http://10.0.4.103:3000/api/productos";
      const config = {
       params: { categoria_id }
      }
-     axios.get(url)
+     axios.get(url, config)
        .then((resp) => {
         console.log(resp.data.productos)
          this.setState({ productos: resp.data.productos });
