@@ -6,12 +6,15 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      categorias: []
+      categoria_id:"",
+      categorias: [],
+      productos: []
     };
   }
 
-  buscarCategorias = () => {
-    const url = "https://productos.ctpoba.edu.ar/api/categorias";
+  buscarCategorias (){
+   // const url = "https://productos.ctpoba.edu.ar/api/categorias";
+    const url = "http://10.0.4.103:3000/api/categorias";
     axios.get(url)
       .then((resp) => {
         this.setState({ categorias: resp.data.categorias });
@@ -21,6 +24,21 @@ export default class App extends Component {
       });
   }
 
+  buscarProductos (categoria_id){
+     const url = "http://10.0.4.103:3000/api/productos";
+     const config = {
+      params: { categoria_id }
+     }
+     axios.get(url)
+       .then((resp) => {
+        console.log(resp.data.productos)
+         this.setState({ productos: resp.data.productos });
+       })
+       .catch((error) => {
+         console.log(error);
+       });
+   }
+
   render() {
     return (
       <div>
@@ -28,17 +46,31 @@ export default class App extends Component {
         <input 
           type="button" 
           value="Buscar" 
-          onClick={this.buscarCategorias} 
+          onClick={() => this.buscarCategorias()} 
         />
-        <select>
+        <input 
+          type="button" 
+          value="Buscar" 
+          onClick={()=>this.buscarProductos(this.state.categoria_id)} 
+        />
+        <select
+          value={this.state.categoria_id}
+          onChange={(e) => this.setState({categoria_id:e.target.value})}
+        
+        >
           {this.state.categorias.map((categoria, index) => (
             <option key={index} value={categoria.id}>
               {categoria.nombre}
             </option>
           ))}
         </select>
+        <h3>{this.state.categoria_id}</h3>
+        {this.state.productos.map((prod, i) => 
+        <span key={prod.id}> { prod.nombre } </span>
+      )}
       </div>
     );
   }
 }
 
+ 
